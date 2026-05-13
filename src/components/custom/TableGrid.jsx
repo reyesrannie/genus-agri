@@ -8,6 +8,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TableSortLabel,
   Typography,
 } from "@mui/material";
 import moment from "moment";
@@ -22,6 +23,8 @@ const TableGrid = ({
   onSelect,
   onView,
   multipleView,
+  params = null,
+  onSort,
 }) => {
   return (
     <TableContainer>
@@ -29,9 +32,38 @@ const TableGrid = ({
         <TableHead>
           <TableRow>
             {header?.map((head, index) => {
+              const isDescending = params?.sorts === `-${head?.value}`;
               return (
                 <TableCell key={index} align={head?.alignHeader}>
-                  <Typography>{head?.name}</Typography>
+                  {head?.sort ? (
+                    <TableSortLabel
+                      direction={isDescending ? "desc" : "asc"}
+                      active={
+                        params?.sorts === head?.value ||
+                        params?.sorts === `-${head?.value}`
+                      }
+                      sx={{
+                        color: "#ffffff !important",
+                        "& .MuiTableSortLabel-icon": {
+                          opacity: 0,
+                          color: "#ffffff !important",
+                        },
+                      }}
+                      onClick={() => {
+                        console.log(params);
+                        const nextSort =
+                          params?.sorts === head?.value
+                            ? `-${head?.value}`
+                            : head?.value;
+
+                        onSort(nextSort);
+                      }}
+                    >
+                      <Typography>{head?.name}</Typography>
+                    </TableSortLabel>
+                  ) : (
+                    <Typography>{head?.name}</Typography>
+                  )}
                 </TableCell>
               );
             })}
@@ -124,7 +156,7 @@ const TableGrid = ({
                       {head?.type === "time" && (
                         <Typography>
                           {dayjs(
-                            `${dayjs().format("YYYY-MM-DD")}T${i[head?.value]}`
+                            `${dayjs().format("YYYY-MM-DD")}T${i[head?.value]}`,
                           ).format("hh:mm a")}
                         </Typography>
                       )}
@@ -132,7 +164,7 @@ const TableGrid = ({
                       {head?.type === "date" && (
                         <Typography>
                           {moment(new Date(i[head?.value])).format(
-                            "MMM DD, YYYY"
+                            "MMM DD, YYYY",
                           )}
                         </Typography>
                       )}

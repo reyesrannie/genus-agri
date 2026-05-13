@@ -46,6 +46,7 @@ const OrderTaker = () => {
     onRowChange,
     onSearchData,
     onFilterChange,
+    onSortTable,
     onReset,
   } = useParamsHookOrderTaker();
 
@@ -64,6 +65,7 @@ const OrderTaker = () => {
     {
       name: "Mir",
       value: "id",
+      sort: true,
     },
     {
       name: "Requestor",
@@ -111,7 +113,7 @@ const OrderTaker = () => {
       await exportExcel(
         res?.result,
         exportHeader,
-        header?.find((h) => params?.status === h?.value)?.label
+        header?.find((h) => params?.status === h?.value)?.label,
       );
     } catch (error) {
       enqueueSnackbar("Something went wrong while exporting data", {
@@ -178,6 +180,8 @@ const OrderTaker = () => {
         <TableGrid
           header={tableHeader}
           items={data?.result}
+          params={params}
+          onSort={onSortTable}
           onSelect={(e, i) => {
             dispatch(setOrdering(i));
             i?.status === "APPROVED"

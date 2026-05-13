@@ -50,6 +50,7 @@ const Ordering = () => {
     onSelectPage,
     onRowChange,
     onSearchData,
+    onSortTable,
   } = useParamsHookTransaction();
 
   const { data, isLoading, isFetching, isError, isSuccess } =
@@ -66,6 +67,7 @@ const Ordering = () => {
     {
       name: "Mir",
       value: "id",
+      sort: true,
     },
     {
       name: "Requestor",
@@ -167,6 +169,8 @@ const Ordering = () => {
         <TableGrid
           header={tableHeader}
           items={data?.result}
+          params={params}
+          onSort={onSortTable}
           {...(params?.status === "pending"
             ? {
                 onSelect: (e, i) => {

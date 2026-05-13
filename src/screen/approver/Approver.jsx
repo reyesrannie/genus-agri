@@ -34,6 +34,7 @@ const Approver = () => {
     onSelectPage,
     onRowChange,
     onSearchData,
+    onSortTable,
   } = useParamsHookTransaction();
 
   const { data, isLoading, isFetching, isError, isSuccess } =
@@ -50,6 +51,7 @@ const Approver = () => {
     {
       name: "Mir",
       value: "id",
+      sort: true,
     },
     {
       name: "Requestor",
@@ -137,6 +139,8 @@ const Approver = () => {
         <TableGrid
           header={tableHeader}
           items={data?.result}
+          params={params}
+          onSort={onSortTable}
           {...(params?.status === "pending"
             ? {
                 onSelect: (e, i) => {
